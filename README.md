@@ -2,8 +2,8 @@
 FortNN is an attempt to create a Fortran library for dealing with Neural Networks and Deep Learning. It has the following features :
 
   - A simple way to define layers and their activation functions, plus other parameters
-  - blasized
-  - uses OpenMP and along that, there is optional MPI usability, if needed
+  - Blasized
+  - Uses OpenMP and along that, there is optional MPI usability, if needed
   - A command line interface, if needed
 
 For now, the following technical features are supported:
