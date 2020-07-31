@@ -26,6 +26,7 @@ If you want to enable a feature like `MPI` or `CLI`, use `-D MPI` or `-D CLI`.
 ```sh
 mpifort -Ofast -O3 -march=native -fopenmp -x f95-cpp-input -D MPI yourprogram.f90 FortNN.f90 -o yourexe -lopenblas && mpirun yourexe
 ```
+FortNN relies on [M_CLI.f90](https://github.com/urbanjost/M_CLI/blob/master/src/M_CLI.f90) for deploying a command line interface. Download the file and include it in your project, if you want the command line interface(`-D CLI`).
 ## How to use
 
 ![The NN structure](/NN.png)
