@@ -13,6 +13,7 @@ For now, the following technical features are supported:
   - learning decay
   - droprates
   - momentum
+  - epochs
   - online training or batach training using MPI
     
 GPU support is not present, but it is planned. As FortNN is CPU-based for now, the performance will largely depend on the implementation of Blas routines you utilize (OpenBlas, Atlas, MKL-DNN, etc.).
@@ -49,7 +50,7 @@ afuncs(5)%f => sigmoid
 Now we want to start with a learning rate of `0.05` and end with `0.001` within `30` epochs. Also, a momentum of `0.9` will be used. We will utilize `sce` for the loss function and `sgd` for the optimizer. Furthermore, we will ustilize `0.8` as the droprate for the hidden layers.
 Initialize the network using:
 ```fortran
-   CALL mynn%init( layers=[784,500,500,500,10] , droprates=[1.,0.8,0.8,0.8,1.] , activ_func=afuncs ,  &
+   CALL mynn%init( layers=[784,500,500,500,10] , droprates=[1.,0.8,0.8,0.8,1.] , activ_func=afuncs ,&
         loss_func=sce , optimizer=sgd , lrs=0.05 , lrf=0.001 , mu=0.9 , epoch=30 )
 ```
 Train the network using 
