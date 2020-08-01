@@ -27,7 +27,7 @@ If you want to enable a feature like `MPI` or `CLI`, use `-D MPI` or `-D CLI`.
 ```sh
 mpifort -Ofast -O3 -march=native -fopenmp -x f95-cpp-input -D MPI yourprogram.f90 FortNN.f90 -o yourexe -lopenblas && mpirun yourexe
 ```
-FortNN relies on [M_CLI.f90](https://github.com/urbanjost/M_CLI/blob/master/src/M_CLI.f90) for deploying a command line interface. Download the file and include it in your project, if you want the command line interface(`-D CLI`).
+FortNN relies on [`M_CLI`](https://github.com/urbanjost/M_CLI) for deploying a command line interface. Download [the module](https://github.com/urbanjost/M_CLI/blob/master/src/M_CLI.f90) and include it in your project, if you want the command line interface(`-D CLI`).
 ## How to use
 
 ![The NN structure](/NN.png)
@@ -52,6 +52,10 @@ Initialize the network using:
 ```fortran
    CALL mynn%init( layers=[784,500,500,500,10] , droprates=[1.,0.8,0.8,0.8,1.] , activ_func=afuncs ,&
         loss_func=sce , optimizer=sgd , lrs=0.05 , lrf=0.001 , mu=0.9 , epoch=30 )
+```
+If the command line interface is used, only call `parser` subroutine instead of the above, and the program will read the options supplied in the command line.
+```fortran
+CALL parser(mynn)
 ```
 Train the network using 
 ```fortran
@@ -85,5 +89,20 @@ where `traindata` is a matrix in which each column represents one set of data an
    END SUBROUTINE testnn
 ```
 where `testdata` and `testresults` are the matrices for performance evaulation of the network.
+## List of general procedures
+```fortran
+tic
+toc
+init
+query
+train1
+train
+train_mpi
+normaldist
+drop_mask
+seeder
+randomizer
+parser
+```
 ## Contributions
 If you would like, you can expand FortNN by adding other capabilities such as more functions. Of course, bug submits and suggestions are welcomed.

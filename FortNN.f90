@@ -1069,9 +1069,9 @@ CONTAINS
            '     --afuncs                                           ', &
            '   The list of activation functions which will be used  ', &
            '   for each layer. Mandatory.                           ', &
-           '   Available: "sigmoid" , "relu" , "lrelu" , "htan"     ', &
-           '   "smax". For example for 3 layers:                    ', &
-           '             --afuncs ''"null","htan","smax"''          ', &
+           '   Available: sigmoid , relu , lrelu , htan , smax      ', &
+           '   For example for 3 layers:                            ', &
+           '             --afuncs null,htan,smax                    ', &
            '                                                        ', &
            '     --lfuncs                                           ', &
            '   The loss function.                                   ', &
@@ -1101,7 +1101,8 @@ CONTAINS
       
       cmd = commandline('--layers 784,100,10 --drates -1.,-1.,-1. &
            &--afuncs "null","sigmoid","sigmoid" &
-           & --lfuncs "mse" --optim "sgd" --lrs -0.1 --lrf -0.1 --mu 0. --epoch 1')
+           & --lfuncs "mse" --optim "sgd" --lrs -0.1 --lrf -0.1 --mu 0. --epoch 1' , &
+           noquote=.TRUE.)
       
       READ(cmd,nml=args,iostat=ios,iomsg=message)
       CALL check_commandline(ios,message,help_text,version_text)
@@ -1131,8 +1132,6 @@ CONTAINS
       mlayers = layers (1:nl)
 
       mdrates = drates (1:nd)
-
-      WRITE (*,args)
 
       ! number of active functions supplied
       naf = 0
@@ -1200,13 +1199,18 @@ CONTAINS
 
       ! in case the user supplied one learning rate but not both
       IF (lrf > 0 .AND. lrs < 0) lrs = lrf
-      IF (lrf < 0 .and. lrs > 0) lrf = lrs
-      
+      IF (lrf < 0 .AND. lrs > 0) lrf = lrs
+
+      !WRITE (*,args)
+
       ! if the user did not supply the droprates, the default droprate would be -1
       ! and we would omit it from the init.
-      IF (drates(1)<0.) THEN 
+      IF ( drates(1) < 0. .AND. lrf > 0 .AND. lrs > 0 ) THEN 
          CALL mynn%init(layers=mlayers , activ_func=afunc ,  &
               loss_func=lfunc , optimizer=ofunc , lrs=lrs , lrf=lrf , mu=mu , epoch=epoch)
+      ELSEIF (lrf < 0 .AND. lrs < 0) THEN
+         CALL mynn%init(layers=mlayers , activ_func=afunc ,  &
+              loss_func=lfunc , optimizer=ofunc , mu=mu , epoch=epoch)
       ELSE
          CALL mynn%init(layers=mlayers , droprates=mdrates , activ_func=afunc ,  &
               loss_func=lfunc , optimizer=ofunc , lrs=lrs , lrf=lrf , mu=mu , epoch=epoch)
